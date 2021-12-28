@@ -1,3 +1,5 @@
+## 镜像地址
+`https://registry.hub.docker.com/r/lhstack/eureka`
 ## 构建eureka镜像
 
 ```dockerfile
