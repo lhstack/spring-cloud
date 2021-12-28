@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zuul-gateway
+data:
+  EUREKA_SERVER_URL: "http://admin:123456@10.43.87.61:8761/eureka"
+  SECURITY_USERNAME: "admin"
+  SECURITY_PASSWORD: "123456"
+  JAVA_OPTS: "-Xmx512m -Xms512m"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zuul-gateway-router
+data:
+  router.json: |
+    {
+      "baidu": {
+         "path": "/baidu/**",
+         "stripPrefix": true,
+         "url": "https://www.baidu.com"
+       }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zuul-gateway
+spec:
+  selector:
+    app: zuul-gateway
+    register-service: eureka
+  ports:
+  - port: 9999
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: zuul-gateway
+spec:
+  replicas: 2
+  selector:
+    app: zuul-gateway
+    register-service: eureka
+  template:
+    metadata:
+      labels:
+        app: zuul-gateway
+        register-service: eureka
+    spec:
+      volumes:
+      - name: router
+        configMap:
+          name: zuul-gateway-router
+      containers:
+      - name: zuul-gateway
+        image: zuul-gateway:11-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9999
+        envFrom:
+        - configMapRef:
+            name: zuul-gateway
+        volumeMounts:
+        - mountPath: /gateway/router
+          name: router
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9999
+          initialDelaySeconds: 5
+          failureThreshold: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9999
+          initialDelaySeconds: 60
+          failureThreshold: 5
+          periodSeconds: 120
+          successThreshold: 1
+          timeoutSeconds: 2

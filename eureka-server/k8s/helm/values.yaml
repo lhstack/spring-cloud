@@ -1,0 +1,77 @@
+# 命名空间
+namespace: "eureka"
+# 镜像名
+image: "lhstack/eureka"
+# configMap名称
+configMapName: "eureka"
+# statefulset name
+statefulSetName: "eureka"
+# 镜像版本
+version: "latest"
+# 集群数量
+replicas: "3"
+# 服务名称
+serviceName: "eureka"
+# eureka无头服务名
+headlessServiceName: "eureka-headless"
+# 资源限制
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 512Mi
+env:
+  # jvm参数，包括-D设置spring参数
+  JAVA_OPTS: "-Xmx512m -Xms512m"
+  # 开启安全认证
+  SECURITY_ENABLE: "true"
+  # 安全认证用户名
+  SECURITY_USERNAME: "admin"
+  # 安全认证密码
+  SECURITY_PASSWORD: "123456"
+statefulSetApiVersion: "apps/v1"
+# 标签
+labels:
+  app: eureka
+  eureka: cluster
+# 服务
+service:
+  type: ClusterIP
+  clusterIP: 10.43.87.61
+  #nodePort: 30856
+# 自定义volume
+#customVolume: 
+#  name: eureka-ssl-volume
+#  volume:
+#    hostPath: 
+#      path: /home/springcloud/eureka/custom 
+#  volumeMount:
+#    mountPath: /eureka/conf/custom
+# 自定义配置
+#customConfig:
+#  name: eureka-application
+#  data:
+#    application.yml: |
+#      spring:
+#        application:
+#          name: eureka server
+#      server:
+#        port: 8761
+#      eureka:
+#        server:
+#          peer-node-read-timeout-ms: 1000
+#          enable-self-preservation: true
+#          eviction-interval-timer-in-ms: 60000
+#        client:
+#          fetch-registry: false
+#          register-with-eureka: false
+#        instance:
+#          hostname: ${HOSTNAME:localhost}
+#          prefer-ip-address: true
+#      management:
+#        endpoints:
+#          web:
+#            exposure:
+#              include: [ 'health','info' ]

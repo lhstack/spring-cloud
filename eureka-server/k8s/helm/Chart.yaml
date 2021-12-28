@@ -1,0 +1,17 @@
+annotations:
+  category: RegistryCenter
+apiVersion: v2
+appVersion: latest
+description: eureka注册中心
+home: https://gitee.com/myprofile/spring-cloud
+keywords:
+- eureka
+- registry
+- spring-cloud
+maintainers:
+- email: lhstack@foxmail.com
+  name: lhstack
+name: eureka
+sources:
+- https://gitee.com/myprofile/spring-cloud/tree/master/eureka-server
+version: 0.0.1

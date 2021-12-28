@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: boot admin
+  boot:
+    admin:
+      discovery:
+        enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: ${HOSTNAME:localhost}
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://admin:123456@10.43.87.61:8761/eureka}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info']
+server:
+  port: 8800

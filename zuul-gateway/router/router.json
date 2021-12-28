@@ -1,0 +1,7 @@
+{
+  "boot-admin": {
+    "path": "/**",
+    "serviceId": "boot admin",
+    "stripPrefix": true
+  }
+}

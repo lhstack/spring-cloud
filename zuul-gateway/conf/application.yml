@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: zuul gateway
+server:
+  port: 9999
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://admin:123456@10.43.87.61:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    hostname: ${HOSTNAME:localhost}
+zuul:
+  ignored-headers:
+  sensitive-headers:
+  add-host-header: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info']
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+ribbon:
+  ReadTimeout: 2000
+  ConnectTimeout: 2000
+  MaxAutoRetries: 3
+  MaxAutoRetriesNextServer: 2

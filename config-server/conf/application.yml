@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: config server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/
+        bootstrap: false
+server:
+  port: 7000
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://admin:123456@10.43.87.61:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    hostname: ${HOSTNAME:localhost}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info']
